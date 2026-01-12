@@ -8,8 +8,8 @@ import {
 
 // --- Types & Data ---
 
-type ProductType = "dry";
-type ViewState = "home" | "dry" | "about" | "contact" | "search" | "privacy" | "terms";
+type ProductType = "dry" | "fresh";
+type ViewState = "home" | "dry" | "fresh" | "about" | "contact" | "search" | "privacy" | "terms";
 
 interface Product {
   id: string;
@@ -26,7 +26,7 @@ interface CartItem extends Product {
   quantity: string;
 }
 
-const WHATSAPP_NUMBER = "918925463428";
+const WHATSAPP_NUMBER = "+916382985806";
 
 // --- Constants ---
 const LOGO_PATH = "images/Logo.jpeg";
@@ -56,6 +56,10 @@ const getEstimatedPrice = (name: string): string => {
   return "₹200 - ₹450";
 };
 
+const getFreshFishPrice = (name: string): string => {
+  return "Market Price"; // Default for fresh fish as prices vary daily
+};
+
 /**
  * USER: Edit the 'imageUrl' fields below to add your own product images.
  * You can use local paths (e.g., "images/myfish.jpg") or web URLs (e.g., "https://example.com/fish.jpg").
@@ -77,23 +81,58 @@ const dryFishData = [
   { name: "Kaja Podi Karuvadu", tamil: "காஜா பொடி கருவாடு", imageUrl: "images/Kaja Podi Karuvadu.png" }
 ];
 
+const freshFishData = [
+  { name: "Vanjaram (Seer Fish)", tamil: "வஞ்சரம்", imageUrl: "Fresh Fish/Vanjaram.png" },
+  { name: "Eral (Prawns)", tamil: "இறால்", imageUrl: "Fresh Fish/eral.png" },
+  { name: "Nethili", tamil: "நெத்திலி", imageUrl: "Fresh Fish/Nethil.png" },
+  { name: "Sankara", tamil: "சங்கரா", imageUrl: "Fresh Fish/Sankara.png" },
+  { name: "Nandu (Crab)", tamil: "நண்டு", imageUrl: "Fresh Fish/Nandu.png" },
+  { name: "Kaala Meen", tamil: "காலா மீன்", imageUrl: "Fresh Fish/Kaala.png" },
+  { name: "Kadal Vara", tamil: "கடல் விறால்", imageUrl: "Fresh Fish/Kadalvaraa.png" },
+  { name: "Kadamba (Squid)", tamil: "கடம்பா / கணவாய்", imageUrl: "Fresh Fish/Kadamba-Kanava.png" },
+  { name: "Kara Podi", tamil: "காரா பொடி", imageUrl: "Fresh Fish/Kara-Podi.png" },
+  { name: "Kavala", tamil: "கவலை", imageUrl: "Fresh Fish/Kavala.png" },
+  { name: "Kilangan", tamil: "கிழங்கான்", imageUrl: "Fresh Fish/Kilanga.png" },
+  { name: "Mathi", tamil: "மத்தி", imageUrl: "Fresh Fish/Mathi.png" },
+  { name: "Nagarai", tamil: "நகரை", imageUrl: "Fresh Fish/Nagarai.png" },
+  { name: "Paalai", tamil: "பாலை", imageUrl: "Fresh Fish/Paalai.png" },
+  { name: "Sheela", tamil: "ஷீலா", imageUrl: "Fresh Fish/Sheela.png" },
+  { name: "Sura (Shark)", tamil: "சுறா", imageUrl: "Fresh Fish/Sura.png" },
+  { name: "Thirukkai", tamil: "திருக்கை", imageUrl: "Fresh Fish/Thirukkai.png" },
+  { name: "Black Vavval", tamil: "கருப்பு வவ்வால்", imageUrl: "Fresh Fish/Vavval Black.png" },
+  { name: "White Vavval", tamil: "வெள்ளை வவ்வால்", imageUrl: "Fresh Fish/Vavval-White.png" }
+];
+
 const generateProducts = (): Product[] => {
-  return dryFishData.map((item, idx) => ({
+  const dryProducts = dryFishData.map((item, idx) => ({
     id: `d-${idx}`,
     name: item.name,
     tamilName: item.tamil,
-    type: "dry",
+    type: "dry" as ProductType,
     description: "Sun-dried, salted, and hygienically processed for authentic taste.",
     priceRange: getEstimatedPrice(item.name),
     imageUrl: item.imageUrl || PLACEHOLDER_IMAGE
   }));
+
+  const freshProducts = freshFishData.map((item, idx) => ({
+    id: `f-${idx}`,
+    name: item.name,
+    tamilName: item.tamil,
+    type: "fresh" as ProductType,
+    description: "Freshly caught, cleaned, and delivered ice-packed.",
+    priceRange: getFreshFishPrice(item.name),
+    imageUrl: item.imageUrl || PLACEHOLDER_IMAGE
+  }));
+
+  return [...dryProducts, ...freshProducts];
 };
 
 const ALL_PRODUCTS = generateProducts();
 
 const NAV_ITEMS: { label: string; id: ViewState }[] = [
   { label: "Home", id: "home" },
-  { label: "Dry Fish Menu", id: "dry" },
+  { label: "Dry Fish", id: "dry" },
+  { label: "Fresh Fish", id: "fresh" },
   { label: "About", id: "about" },
   { label: "Contact", id: "contact" },
 ];
@@ -178,7 +217,7 @@ const CartSidebar = ({
   const handleCheckout = () => {
     if (items.length === 0) return;
 
-    let msg = `*🛒 New Dry Fish Order*\n`;
+    let msg = `*🛒 New Order*\n`;
     msg += `----------------------------\n`;
     items.forEach((item, idx) => {
       msg += `${idx + 1}. *${item.name}* (${item.tamilName})\n`;
@@ -286,7 +325,7 @@ const ProductOrderModal = ({ product, onClose }: { product: Product, onClose: ()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    let msg = `*⚡ Dry Fish Quick Order*\n`;
+    let msg = `*⚡ Quick Order*\n`;
     msg += `------------------\n`;
     msg += `🐟 Product: *${product.name}*\n`;
     msg += `🔤 Tamil: ${product.tamilName}\n`;
@@ -378,6 +417,7 @@ const FloatingContactWidget = () => {
           <input type="text" placeholder="Your Name" className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 outline-none bg-slate-50" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
           <select className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 outline-none bg-slate-50" value={formData.topic} onChange={(e) => setFormData({ ...formData, topic: e.target.value })}>
             <option>Buying Dry Fish</option>
+            <option>Buying Fresh Fish</option>
             <option>Bulk Order Enquiry</option>
             <option>Delivery Status</option>
           </select>
@@ -405,7 +445,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onInstantBuy, onAddT
       <div className="relative aspect-[4/3] overflow-hidden bg-brand-cream">
         <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE} />
         <div className="absolute top-3 right-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm flex items-center gap-1 border border-brand-sand/30">
-          <CheckCircle2 size={12} className="text-brand-ocean" /> Premium Dry
+          <CheckCircle2 size={12} className="text-brand-ocean" /> {product.type === 'dry' ? 'Premium Dry' : 'Daily Fresh'}
         </div>
       </div>
 
@@ -470,7 +510,10 @@ const App = () => {
               <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-brand-sand/20">
                 <Search size={40} className="text-brand-ocean/50 mx-auto mb-6" />
                 <h3 className="text-2xl font-bold text-brand-navy mb-3">No products found</h3>
-                <Button onClick={() => setView("dry")} variant="brand" className="gap-2"><ShoppingBag size={20} /> View All Dry Fish</Button>
+                <div className="flex justify-center gap-4">
+                  <Button onClick={() => setView("dry")} variant="brand" className="gap-2"><ShoppingBag size={20} /> Shop Dry</Button>
+                  <Button onClick={() => setView("fresh")} variant="brand-outline" className="gap-2"><ShoppingBag size={20} /> Shop Fresh</Button>
+                </div>
               </div>
             )}
           </div>
@@ -482,6 +525,17 @@ const App = () => {
             <SectionTitle title="Premium Dry Fish Menu" subtitle="Sun-dried, authentic flavors delivered to your kitchen." />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {ALL_PRODUCTS.map(p => <ProductCard key={p.id} product={p} onInstantBuy={handleInstantBuy} onAddToCart={handleAddToCart} />)}
+            </div>
+          </div>
+        );
+
+      case "fresh":
+        return (
+          <div className="container mx-auto px-4 py-8 animate-in fade-in duration-500">
+            <BackButton onClick={() => setView("home")} />
+            <SectionTitle title="Daily Fresh Fish" subtitle="Straight from the ocean, cleaned and packed with ice." />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {ALL_PRODUCTS.filter(p => p.type === "fresh").map(p => <ProductCard key={p.id} product={p} onInstantBuy={handleInstantBuy} onAddToCart={handleAddToCart} />)}
             </div>
           </div>
         );
@@ -560,14 +614,17 @@ const App = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/80 to-transparent"></div>
               <div className="relative container mx-auto px-4 py-24 md:py-32 flex flex-col items-start justify-center h-full">
                 <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-brand-sea/20 border border-brand-sea/30 text-brand-sea font-medium text-sm uppercase tracking-wide backdrop-blur-sm">Premium Karuvadu Online</div>
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 max-w-4xl">Quality <span className="text-brand-sea">Dry Fish</span><br />Delivered in Chennai.</h1>
-                <p className="text-lg md:text-xl text-brand-cream/80 mb-8 max-w-xl">Taste the authentic flavors of carefully sun-dried fish. 100% hygienic, salted, and delivered to your doorstep.</p>
-                <Button onClick={() => setView("dry")} variant="brand" className="bg-brand-sand text-brand-navy hover:bg-white gap-2 w-full sm:w-auto shadow-xl"><ShoppingBag size={20} /> Shop Dry Fish Menu</Button>
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 max-w-4xl">Quality <span className="text-brand-sea">Seafood</span><br />Delivered in Chennai.</h1>
+                <p className="text-lg md:text-xl text-brand-cream/80 mb-8 max-w-xl">Experience the best of both worlds - Authentic Sun-dried Karuvadu and Daily Fresh Catch. Hygienically processed and delivered to your doorstep.</p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button onClick={() => setView("dry")} variant="brand" className="bg-brand-sand text-brand-navy hover:bg-white gap-2 w-full sm:w-auto shadow-xl"><ShoppingBag size={20} /> Shop Dry Fish</Button>
+                  <Button onClick={() => setView("fresh")} variant="brand-outline" className="border-brand-sand text-brand-sand hover:bg-brand-sand hover:text-brand-navy gap-2 w-full sm:w-auto"><ShoppingBag size={20} /> Shop Fresh Fish</Button>
+                </div>
               </div>
             </div>
 
             <div className="container mx-auto px-4 py-16">
-              <SectionTitle title="Featured Dry Fish" subtitle="Our best-selling sun-dried varieties" />
+              <SectionTitle title="Featured Products" subtitle="Our best-selling dry and fresh varieties" />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {bestSellers.map(p => <ProductCard key={p.id} product={p} onInstantBuy={handleInstantBuy} onAddToCart={handleAddToCart} />)}
               </div>
@@ -629,7 +686,10 @@ const App = () => {
                 <button key={item.id} onClick={() => setView(item.id)} className={`text-sm font-semibold transition-all duration-200 ${view === item.id ? "text-brand-ocean" : "text-brand-navy/60 hover:text-brand-navy"}`}>{item.label}</button>
               ))}
               <div className="relative w-56">
-                <input type="text" placeholder="Search dry fish..." value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); if (view !== "search" && e.target.value) setView("search"); }} className="w-full pl-9 pr-4 py-2 bg-brand-cream border border-brand-sand/20 rounded-full text-sm outline-none" />
+                <div className="relative w-56">
+                  <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); if (view !== "search" && e.target.value) setView("search"); }} className="w-full pl-9 pr-4 py-2 bg-brand-cream border border-brand-sand/20 rounded-full text-sm outline-none" />
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-navy/40" />
+                </div>
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-navy/40" />
               </div>
               <button onClick={() => setIsCartOpen(true)} className="relative p-2 text-brand-navy hover:bg-brand-cream rounded-full">
@@ -681,7 +741,10 @@ const App = () => {
                 </div>
                 <h3 className="text-white font-bold text-xl">DRY Fish Chennai</h3>
               </div>
-              <p className="text-sm text-brand-sea mb-6">Premium quality dry fish (Karuvadu) delivered hygienically across Chennai. Authentic taste, sun-dried perfection.</p>
+              <h3 className="text-white font-bold text-xl">DRY Fish Chennai</h3>
+            </div>
+            <p className="text-sm text-brand-sea mb-6">Premium quality Dry Fish and Fresh Fish delivered hygienically across Chennai. Authentic taste, fresh catch.</p>
+            <div className="bg-white/5 rounded-lg p-3 border border-brand-sea/20">
               <div className="bg-white/5 rounded-lg p-3 border border-brand-sea/20">
                 <div className="font-black text-brand-sand text-lg">FSSAI</div>
                 <p className="text-[10px] text-brand-sea/80">Lic. No. 12423000000000</p>
@@ -690,8 +753,9 @@ const App = () => {
             <div>
               <h4 className="text-white font-semibold mb-6">Menu</h4>
               <ul className="space-y-3 text-sm text-brand-sea">
-                <li><button onClick={() => setView("dry")}>Dry Fish Varieties</button></li>
-                <li><button onClick={() => setView("about")}>About Our Sourcing</button></li>
+                <li><button onClick={() => setView("dry")}>Dry Fish</button></li>
+                <li><button onClick={() => setView("fresh")}>Fresh Fish</button></li>
+                <li><button onClick={() => setView("about")}>About Us</button></li>
                 <li><button onClick={() => setView("contact")}>Contact Support</button></li>
               </ul>
             </div>
