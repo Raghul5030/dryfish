@@ -82,25 +82,25 @@ const dryFishData = [
 ];
 
 const freshFishData = [
-  { name: "Vanjaram (Seer Fish)", tamil: "வஞ்சரம்", imageUrl: "Fresh Fish/Vanjaram.png" },
-  { name: "Eral (Prawns)", tamil: "இறால்", imageUrl: "Fresh Fish/eral.png" },
-  { name: "Nethili", tamil: "நெத்திலி", imageUrl: "Fresh Fish/Nethil.png" },
-  { name: "Sankara", tamil: "சங்கரா", imageUrl: "Fresh Fish/Sankara.png" },
-  { name: "Nandu (Crab)", tamil: "நண்டு", imageUrl: "Fresh Fish/Nandu.png" },
-  { name: "Kaala Meen", tamil: "காலா மீன்", imageUrl: "Fresh Fish/Kaala.png" },
-  { name: "Kadal Vara", tamil: "கடல் விறால்", imageUrl: "Fresh Fish/Kadalvaraa.png" },
-  { name: "Kadamba (Squid)", tamil: "கடம்பா / கணவாய்", imageUrl: "Fresh Fish/Kadamba-Kanava.png" },
-  { name: "Kara Podi", tamil: "காரா பொடி", imageUrl: "Fresh Fish/Kara-Podi.png" },
-  { name: "Kavala", tamil: "கவலை", imageUrl: "Fresh Fish/Kavala.png" },
-  { name: "Kilangan", tamil: "கிழங்கான்", imageUrl: "Fresh Fish/Kilanga.png" },
-  { name: "Mathi", tamil: "மத்தி", imageUrl: "Fresh Fish/Mathi.png" },
-  { name: "Nagarai", tamil: "நகரை", imageUrl: "Fresh Fish/Nagarai.png" },
-  { name: "Paalai", tamil: "பாலை", imageUrl: "Fresh Fish/Paalai.png" },
-  { name: "Sheela", tamil: "ஷீலா", imageUrl: "Fresh Fish/Sheela.png" },
-  { name: "Sura (Shark)", tamil: "சுறா", imageUrl: "Fresh Fish/Sura.png" },
-  { name: "Thirukkai", tamil: "திருக்கை", imageUrl: "Fresh Fish/Thirukkai.png" },
-  { name: "Black Vavval", tamil: "கருப்பு வவ்வால்", imageUrl: "Fresh Fish/Vavval Black.png" },
-  { name: "White Vavval", tamil: "வெள்ளை வவ்வால்", imageUrl: "Fresh Fish/Vavval-White.png" }
+  { name: "Vanjaram (Seer Fish)", tamil: "வஞ்சரம்", imageUrl: "Fresh Fish/optimized/Vanjaram.webp" },
+  { name: "Eral (Prawns)", tamil: "இறால்", imageUrl: "Fresh Fish/optimized/eral.webp" },
+  { name: "Nethili", tamil: "நெத்திலி", imageUrl: "Fresh Fish/optimized/Nethil.webp" },
+  { name: "Sankara", tamil: "சங்கரா", imageUrl: "Fresh Fish/optimized/Sankara.webp" },
+  { name: "Nandu (Crab)", tamil: "நண்டு", imageUrl: "Fresh Fish/optimized/Nandu.webp" },
+  { name: "Kaala Meen", tamil: "காலா மீன்", imageUrl: "Fresh Fish/optimized/Kaala.webp" },
+  { name: "Kadal Vara", tamil: "கடல் விறால்", imageUrl: "Fresh Fish/optimized/Kadalvaraa.webp" },
+  { name: "Kadamba (Squid)", tamil: "கடம்பா / கணவாய்", imageUrl: "Fresh Fish/optimized/Kadamba-Kanava.webp" },
+  { name: "Kara Podi", tamil: "காரா பொடி", imageUrl: "Fresh Fish/optimized/Kara-Podi.webp" },
+  { name: "Kavala", tamil: "கவலை", imageUrl: "Fresh Fish/optimized/Kavala.webp" },
+  { name: "Kilangan", tamil: "கிழங்கான்", imageUrl: "Fresh Fish/optimized/Kilanga.webp" },
+  { name: "Mathi", tamil: "மத்தி", imageUrl: "Fresh Fish/optimized/Mathi.webp" },
+  { name: "Nagarai", tamil: "நகரை", imageUrl: "Fresh Fish/optimized/Nagarai.webp" },
+  { name: "Paalai", tamil: "பாலை", imageUrl: "Fresh Fish/optimized/Paalai.webp" },
+  { name: "Sheela", tamil: "ஷீலா", imageUrl: "Fresh Fish/optimized/Sheela.webp" },
+  { name: "Sura (Shark)", tamil: "சுறா", imageUrl: "Fresh Fish/optimized/Sura.webp" },
+  { name: "Thirukkai", tamil: "திருக்கை", imageUrl: "Fresh Fish/optimized/Thirukkai.webp" },
+  { name: "Black Vavval", tamil: "கருப்பு வவ்வால்", imageUrl: "Fresh Fish/optimized/Vavval Black.webp" },
+  { name: "White Vavval", tamil: "வெள்ளை வவ்வால்", imageUrl: "Fresh Fish/optimized/Vavval-White.webp" }
 ];
 
 const generateProducts = (): Product[] => {
