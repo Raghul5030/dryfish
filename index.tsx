@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Menu, X, Phone, ShoppingBag, MapPin, Clock,
-  CheckCircle2, Star, MessageCircle, ExternalLink, ArrowLeft, Send, Minus, Package, User, Scissors, ShoppingCart, Trash2, Plus, Zap, Search, ShieldCheck, FileText
+  CheckCircle2, Star, MessageCircle, ExternalLink, ArrowLeft, Send, Minus, Package, User, Scissors, ShoppingCart, Trash2, Plus, Zap, Search, ShieldCheck, FileText, ArrowRight
 } from "lucide-react";
 
 // --- Types & Data ---
@@ -623,6 +623,48 @@ const App = () => {
               </div>
             </div>
 
+            <div className="bg-[#f0ece6] py-16">
+              <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+
+                  {/* Fresh Fish Card */}
+                  <div className="relative h-72 md:h-80 rounded-3xl overflow-hidden shadow-2xl group cursor-pointer" onClick={() => setView('fresh')}>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#dfe6e9] to-[#b2bec3] transition-transform duration-700 group-hover:scale-105"></div>
+                    <div className="absolute top-0 right-0 w-3/4 h-full">
+                      <img src={freshFishData[0].imageUrl} className="w-full h-full object-contain object-right-bottom mix-blend-multiply drop-shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3" alt="Fresh Fish" />
+                    </div>
+                    <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                      <div className="relative z-10 text-left max-w-[60%]">
+                        <h3 className="text-3xl md:text-5xl font-black text-slate-800 mb-3 tracking-tight">Fresh<br />Fish</h3>
+                        <p className="text-slate-600 font-medium mb-6 leading-snug">Daily catch, straight from the ocean.</p>
+                        <button className="inline-flex items-center gap-2 text-sm font-bold text-slate-800 border-b-2 border-slate-800 pb-0.5 hover:text-brand-navy hover:border-brand-navy transition-colors">
+                          Explore Menu <ArrowRight size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dry Fish Card */}
+                  <div className="relative h-72 md:h-80 rounded-3xl overflow-hidden shadow-2xl group cursor-pointer" onClick={() => setView('dry')}>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#2c3e50] to-[#000000] transition-transform duration-700 group-hover:scale-105"></div>
+                    <div className="absolute top-4 right-0 w-3/4 h-full">
+                      <img src="images/Vanjaram Karuvadu.png" className="w-full h-full object-contain object-right-bottom drop-shadow-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" alt="Dry Fish" />
+                    </div>
+                    <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                      <div className="relative z-10 text-left max-w-[60%]">
+                        <h3 className="text-3xl md:text-5xl font-black text-white mb-3 tracking-tight">Dry<br />Fish</h3>
+                        <p className="text-gray-300 font-medium mb-6 leading-snug">Authentic sun-dried flavor & quality.</p>
+                        <button className="inline-flex items-center gap-2 text-sm font-bold text-white border-b-2 border-brand-sand pb-0.5 hover:text-brand-sand transition-colors">
+                          Explore Menu <ArrowRight size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
             <div className="container mx-auto px-4 py-16">
               <SectionTitle title="Featured Products" subtitle="Our best-selling dry and fresh varieties" />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -685,12 +727,9 @@ const App = () => {
               {NAV_ITEMS.map((item) => (
                 <button key={item.id} onClick={() => setView(item.id)} className={`text-sm font-semibold transition-all duration-200 ${view === item.id ? "text-brand-ocean" : "text-brand-navy/60 hover:text-brand-navy"}`}>{item.label}</button>
               ))}
-              <div className="relative w-56">
-                <div className="relative w-56">
-                  <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); if (view !== "search" && e.target.value) setView("search"); }} className="w-full pl-9 pr-4 py-2 bg-brand-cream border border-brand-sand/20 rounded-full text-sm outline-none" />
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-navy/40" />
-                </div>
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-navy/40" />
+              <div className="relative w-full max-w-md hidden md:block">
+                <input type="text" placeholder="Search fish..." value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); if (view !== "search" && e.target.value) setView("search"); }} className="w-full pl-10 pr-4 py-2.5 bg-[#f3f4f6] border-none rounded-full text-slate-700 text-sm focus:ring-2 focus:ring-brand-navy/10 transition-all outline-none" />
+                <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               </div>
               <button onClick={() => setIsCartOpen(true)} className="relative p-2 text-brand-navy hover:bg-brand-cream rounded-full">
                 <ShoppingCart size={24} />
