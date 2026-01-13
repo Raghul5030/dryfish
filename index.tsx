@@ -46,18 +46,24 @@ const WhatsAppIcon = ({ size = 24, className = "" }: { size?: number, className?
   </svg>
 );
 
-const getEstimatedPrice = (name: string): string => {
+const getEstimatedPrice = (name: string, type: ProductType): string => {
   const n = name.toLowerCase();
-  if (n.includes('vanjaram')) return "₹800 - ₹1200";
-  if (n.includes('nethili')) return "₹300 - ₹500";
-  if (n.includes('valai')) return "₹350 - ₹550";
-  if (n.includes('prawn') || n.includes('sennakunni')) return "₹250 - ₹450";
-  if (n.includes('kavala')) return "₹150 - ₹300";
-  return "₹200 - ₹450";
-};
-
-const getFreshFishPrice = (name: string): string => {
-  return "Market Price"; // Default for fresh fish as prices vary daily
+  if (type === 'fresh') {
+    if (n.includes('vanjaram')) return "₹900 - ₹1400"; // Expensive
+    if (n.includes('vavval')) return "₹600 - ₹900";
+    if (n.includes('prawn') || n.includes('era')) return "₹400 - ₹700";
+    if (n.includes('nethili')) return "₹250 - ₹400";
+    if (n.includes('sankara')) return "₹400 - ₹600";
+    if (n.includes('maththi') || n.includes('mathi')) return "₹150 - ₹250"; // Cheap
+    return "₹300 - ₹600"; // Default Fresh
+  } else {
+    if (n.includes('vanjaram')) return "₹800 - ₹1200";
+    if (n.includes('nethili')) return "₹300 - ₹500";
+    if (n.includes('valai')) return "₹350 - ₹550";
+    if (n.includes('prawn') || n.includes('sennakunni')) return "₹250 - ₹450";
+    if (n.includes('kavala')) return "₹150 - ₹300";
+    return "₹200 - ₹450";
+  }
 };
 
 /**
@@ -110,7 +116,7 @@ const generateProducts = (): Product[] => {
     tamilName: item.tamil,
     type: "dry" as ProductType,
     description: "Sun-dried, salted, and hygienically processed for authentic taste.",
-    priceRange: getEstimatedPrice(item.name),
+    priceRange: getEstimatedPrice(item.name, "dry"),
     imageUrl: item.imageUrl || PLACEHOLDER_IMAGE
   }));
 
@@ -120,7 +126,7 @@ const generateProducts = (): Product[] => {
     tamilName: item.tamil,
     type: "fresh" as ProductType,
     description: "Freshly caught, cleaned, and delivered ice-packed.",
-    priceRange: getFreshFishPrice(item.name),
+    priceRange: getEstimatedPrice(item.name, "fresh"),
     imageUrl: item.imageUrl || PLACEHOLDER_IMAGE
   }));
 
@@ -439,6 +445,49 @@ interface ProductCardProps {
   onAddToCart: (p: Product) => void;
 }
 
+const FavoriteCard: React.FC<ProductCardProps> = ({ product, onInstantBuy, onAddToCart }) => {
+  const isDry = product.type === 'dry';
+  const bgColor = isDry ? 'bg-[#FFF8E7]' : 'bg-[#EBF8FF]';
+  const textColor = isDry ? 'text-[#8B4513]' : 'text-[#0284C7]';
+  const badgeColor = isDry ? 'text-[#8B4513] border-[#8B4513]/20' : 'text-[#0284C7] border-[#0284C7]/20';
+
+  return (
+    <div className={`group ${bgColor} rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden flex flex-col h-full`}>
+      <div className="relative h-64 flex items-center justify-center overflow-hidden">
+        <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${badgeColor} bg-white/90 backdrop-blur-sm flex items-center gap-1 z-10`}>
+          {isDry ? <CheckCircle2 size={10} /> : <Clock size={10} />}
+          {isDry ? 'Premium Dry' : 'Daily Fresh'}
+        </div>
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE}
+        />
+      </div>
+
+      <div className="bg-white p-5 flex flex-col flex-grow border-t border-slate-100">
+        <div className="mb-2">
+          <h4 className="text-lg font-bold text-slate-800 line-clamp-1">{product.name}</h4>
+          <p className="text-slate-500 text-sm font-medium">{product.tamilName}</p>
+        </div>
+        <div className="mb-4 text-xl font-black text-slate-800">
+          {product.priceRange} <span className="text-sm font-medium text-slate-400">/kg</span>
+        </div>
+
+        <div className="mt-auto grid grid-cols-5 gap-2">
+          <button onClick={() => onAddToCart(product)} className="col-span-2 flex items-center justify-center gap-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-200 transition-colors font-bold text-sm py-2">
+            <Plus size={16} /> Add
+          </button>
+          <button onClick={() => onInstantBuy(product)} className="col-span-3 flex items-center justify-center gap-1 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-bold text-sm shadow-lg shadow-slate-900/10 py-2">
+            <Zap size={16} className="text-yellow-400 fill-current" /> Buy Now
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProductCard: React.FC<ProductCardProps> = ({ product, onInstantBuy, onAddToCart }) => {
   return (
     <div className="group bg-white rounded-xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-brand-sand/20 overflow-hidden flex flex-col h-full">
@@ -483,7 +532,14 @@ const App = () => {
 
   useEffect(() => { window.scrollTo(0, 0); setIsMenuOpen(false); }, [view]);
 
-  const bestSellers = ALL_PRODUCTS.slice(0, 6);
+  const customerFavorites = ALL_PRODUCTS.filter(p =>
+    p.name === "Vanjaram Karuvadu" ||
+    p.name === "Nethili Karuvadu" ||
+    p.name === "Vala Karuvadu" ||
+    p.name === "Vanjaram (Seer Fish)" ||
+    p.name === "Black Vavval" ||
+    p.name === "Kadamba (Squid)"
+  );
 
   const handleInstantBuy = (product: Product) => setSelectedProduct(product);
   const handleAddToCart = (product: Product) => {
@@ -524,7 +580,7 @@ const App = () => {
             <BackButton onClick={() => setView("home")} />
             <SectionTitle title="Premium Dry Fish Menu" subtitle="Sun-dried, authentic flavors delivered to your kitchen." />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {ALL_PRODUCTS.map(p => <ProductCard key={p.id} product={p} onInstantBuy={handleInstantBuy} onAddToCart={handleAddToCart} />)}
+              {ALL_PRODUCTS.filter(p => p.type === "dry").map(p => <ProductCard key={p.id} product={p} onInstantBuy={handleInstantBuy} onAddToCart={handleAddToCart} />)}
             </div>
           </div>
         );
@@ -666,9 +722,9 @@ const App = () => {
             </div>
 
             <div className="container mx-auto px-4 py-16">
-              <SectionTitle title="Featured Products" subtitle="Our best-selling dry and fresh varieties" />
+              <SectionTitle title="Customer Favorites" subtitle="Our most popular items this week" />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {bestSellers.map(p => <ProductCard key={p.id} product={p} onInstantBuy={handleInstantBuy} onAddToCart={handleAddToCart} />)}
+                {customerFavorites.map(p => <FavoriteCard key={p.id} product={p} onInstantBuy={handleInstantBuy} onAddToCart={handleAddToCart} />)}
               </div>
               <div className="mt-12 text-center">
                 <Button onClick={() => setView("dry")} variant="brand-outline" className="px-12">View Full Menu</Button>
